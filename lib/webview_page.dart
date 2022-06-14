@@ -77,7 +77,7 @@ class WebViewXPageState extends State<WebViewXPage> {
   Widget _buildWebViewX() {
     return WebViewX(
       key: const ValueKey('webviewx'),
-      initialContent: '<b>hi</b>',
+      initialContent: '<b>hi1</b>',
       initialSourceType: SourceType.html,
       height: screenSize.height / 2,
       width: min(screenSize.width * 0.8, 1024),

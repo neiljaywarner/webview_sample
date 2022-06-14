@@ -8,17 +8,23 @@ import 'package:webviewx/webviewx.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized(); // NEW
 
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Webview opens and can load and test that it loaded', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle(Duration(seconds: 2));
-    // wait for controller to get initalized.
-    await tester.tap(find.text('say hi2'));
-    await tester.pumpAndSettle(Duration(seconds: 2));
+    await tester.pumpAndSettle(); // wait for frame and controller to get initialized.
     WebViewXPageState webviewState = tester.state(find.byType(WebViewXPage));
-    WebViewContent content = await webviewState.webviewController.getContent();
-    String entirePage = content.toString();
-    String inner = entirePage.split('<body>').last.split('</body>').first;
-    print(inner);
+    String entirePage = await webviewState.webviewController.innerBody();
+    // TODO: Real world maybe use javascript and regular webview
+    //  instead but this is good enough for now.
+    //and possibly we would actually want flutter web compatible.
+    String inner = getInnerHtmlBody(entirePage);
+    expect(inner, equalsIgnoringWhitespace('<b>hi1</b>'));
   });
 }
+
+extension HtmlParsing on WebViewXController {
+  Future<String> innerBody() async => getInnerHtmlBody((await getContent()).toString());
+}
+
+
+///// chop  html, head, title,soulrcetype, headres, etc. etc from the content source string
+String getInnerHtmlBody(String entirePage) => entirePage.split('<body>').last.split('</body>').first;
