@@ -17,7 +17,7 @@ void main() {
     //  instead but this is good enough for now.
     //and possibly we would actually want flutter web compatible.
     String inner = getInnerHtmlBody(entirePage);
-    expect(inner, equalsIgnoringWhitespace('<b>hi1</b>'));
+    expect(inner, equalsIgnoringWhitespace('<b>hi</b>'));
   });
 }
 
